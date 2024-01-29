@@ -82,6 +82,7 @@ cor.test(combined$AFSS, combined$BOI) #.11 #BOI
 cor.test(combined$AFSS, combined$Concrete) #.01 #CONCRETE
 cor.test(combined$AFSS, combined$SUBTLEX) #.33 #SUBTLEX
 cor.test(combined$AFSS, combined$AoA) #-.21 #AoA 
+cor.test(combined$AFSS, combined$QSS) #.13 #AoA 
 
 #Strongest AFS
 cor.test(combined$AFS, combined$BOI) #.17 #BOI
@@ -89,6 +90,7 @@ cor.test(combined$AFS, combined$Concrete) #.13 #CONCRETE
 cor.test(combined$AFS, combined$SUBTLEX) #-.09 #SUBTLEX
 cor.test(combined$AFS, combined$AoA) #.01 #AOA #Non-sig
 cor.test(combined$AFS, combined$AFSS) #-.47
+cor.test(combined$AFP, combined$QSS) #-.09
 
 mean(combined$AFS); sd(combined$AFS)
 mean(combined$AFS); sd(combined$AFS)
@@ -99,8 +101,9 @@ cor.test(combined$AFP, combined$Concrete) #.25 #CONCRETE
 cor.test(combined$AFP, combined$SUBTLEX) #.08 #SUBTLEX
 cor.test(combined$AFP, combined$AoA) #-.21 #AOA #Non-sig
 cor.test(combined$AFP, combined$AFSS) #-.09
+cor.test(combined$AFP, combined$QSS) #.03
 
-corr.test(combined[ , c(5,3,4, 9,8,10,11)])
+corr.test(combined[ , c(5,3,4,9,8,10,11,13)])
 
 ####Regressions####
 ###AFSS
