@@ -82,7 +82,7 @@ cor.test(combined$AFSS, combined$BOI) #.11 #BOI
 cor.test(combined$AFSS, combined$Concrete) #.01 #CONCRETE
 cor.test(combined$AFSS, combined$SUBTLEX) #.33 #SUBTLEX
 cor.test(combined$AFSS, combined$AoA) #-.21 #AoA 
-cor.test(combined$AFSS, combined$QSS) #.13 #AoA 
+cor.test(combined$AFSS, combined$QSS) #.13 #QSS
 
 #Strongest AFS
 cor.test(combined$AFS, combined$BOI) #.17 #BOI
