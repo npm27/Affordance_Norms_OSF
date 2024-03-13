@@ -23,15 +23,6 @@ dat$affordance_response = tolower(dat$affordance_response)
 
 source("Remove idk.R")
 
-#remove other weirdness
-dat$affordance_response[dat$affordance_response == "unknown"] = NA
-dat$affordance_response[dat$affordance_response == "i have no clue"] = NA
-dat$affordance_response[dat$affordance_response == "i don't know this word"] = NA
-dat$affordance_response[dat$affordance_response == "i do not what this is "] = NA
-dat$affordance_response[dat$affordance_response == "i do not know what this is "] = NA
-dat$affordance_response[dat$affordance_response == "i dont even know what this is"] = NA
-dat$affordance_response[dat$affordance_response == "i do not know"] = NA
-
 #Check for NAs
 table(is.na(dat$affordance_response))
 
@@ -65,7 +56,7 @@ spelling.sugg = unlist(lapply(spelling.sugg, function(x) x[1]))
 spell_check = cbind(spelling.sugg, spelling.errors)
 
 #Write to file and manually confirm
-#write.csv(spell_check, file = "spell_check_raw.csv", row.names = F)
+write.csv(spell_check, file = "spell_check_raw.csv", row.names = F) ##open excel and manually check. Be sure to save changes!
 
 #read back in the checked output
 spell_check = read.csv("spell_check_raw.csv", stringsAsFactors = F)
