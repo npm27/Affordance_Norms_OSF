@@ -2,6 +2,9 @@
 ##read in data
 affs = read.csv("Data/Affordance Norms_fsg.csv")
 cue_table = read.csv("Data/Cue Table.csv")
+elp = read.csv("Data/ELP_Z.csv")
+
+colnames(cue_table)[1] = "Cue"
 
 ##load libraries
 library(psych)
@@ -83,6 +86,7 @@ cor.test(combined$AFSS, combined$Concrete) #.01 #CONCRETE
 cor.test(combined$AFSS, combined$SUBTLEX) #.33 #SUBTLEX
 cor.test(combined$AFSS, combined$AoA) #-.21 #AoA 
 cor.test(combined$AFSS, combined$QSS) #.13 #QSS
+cor.test(combined$AFSS, combined$Animacy) #.13 #QSS
 
 #Strongest AFS
 cor.test(combined$AFS, combined$BOI) #.17 #BOI
@@ -90,7 +94,8 @@ cor.test(combined$AFS, combined$Concrete) #.13 #CONCRETE
 cor.test(combined$AFS, combined$SUBTLEX) #-.09 #SUBTLEX
 cor.test(combined$AFS, combined$AoA) #.01 #AOA #Non-sig
 cor.test(combined$AFS, combined$AFSS) #-.47
-cor.test(combined$AFP, combined$QSS) #-.09
+cor.test(combined$AFS, combined$QSS) #-.09
+cor.test(combined$AFS, combined$Animacy) #-.30
 
 mean(combined$AFS); sd(combined$AFS)
 mean(combined$AFS); sd(combined$AFS)
@@ -102,6 +107,7 @@ cor.test(combined$AFP, combined$SUBTLEX) #.08 #SUBTLEX
 cor.test(combined$AFP, combined$AoA) #-.21 #AOA #Non-sig
 cor.test(combined$AFP, combined$AFSS) #-.09
 cor.test(combined$AFP, combined$QSS) #.03
+cor.test(combined$AFP, combined$Animacy) #-.31
 
 corr.test(combined[ , c(5,3,4,9,8,10,11,13)])
 
@@ -149,8 +155,41 @@ summary(model9) #non-sig
 cor.test(cue_table$AoA, cue_table$BOI) #.13 #BOI
 cor.test(cue_table$AoA, cue_table$Concrete) #.03 #CONCRETE
 cor.test(cue_table$AoA, cue_table$SUBTLEX) #.33 #SUBTLEX
-cor.test(cue_table$BOI, cue_table$AoA) #-.22 #AoA 
+cor.test(cue_table$BOI, cue_table$AoA) #-.22 #AoA
+cor.test(cue_table$BOI, cue_table$AoA) #-.22 #AoA
 
 mean(cue_table$AoA, na.rm = T)
 sd(cue_table$AoA, na.rm = T)
 
+####LDT stuff####
+elp$Word = tolower(elp$Word)
+elp$I_Zscore = as.numeric(elp$I_Zscore)
+
+elp2 = merge(cue_table, elp, by.x = "Cue", by.y = "Word")
+
+##variables to include
+#length and frequency (step 1)
+#semantic variables AOA, concreteness, BOI, AFSS (Step 2)
+
+elp2$z_length = scale(elp2$Length.x)
+elp2$z_aoa = scale(elp2$AoA)
+elp2$z_BOI = scale(elp2$BOI)
+elp2$z_con = scale(elp2$Concrete)
+elp2$z_SUBTLEX = scale(elp2$SUBTLEX)
+elp2$z_AFSS = scale(elp2$AFSS)
+
+#step 1
+ldt.1 = lm(I_Zscore ~ z_length + z_SUBTLEX, data = elp2)
+summary(ldt.1)
+
+#step 2
+ldt.2 = lm(I_Zscore ~ z_length + z_SUBTLEX +
+             z_aoa + z_BOI + z_con + z_AFSS, data = elp2)
+summary(ldt.2)
+
+##AFSS not a good predictor
+
+####What about overlap measures?####
+elp3 = merge(elp2, fsg2, by.x = "Cue", by.y = "Cue")
+
+elp4 = na.omit(elp3)
