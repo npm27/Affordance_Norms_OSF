@@ -25,3 +25,5 @@ cor.test(cos$AFS, cos$COS)
 cor.test(fsg$AFP, fsg$FSG)
 cor.test(cos$AFP, cos$COS)
 
+cor.test(fsg$AFP, fsg$AFS)
+cor.test(cos$AFP, cos$AFS)

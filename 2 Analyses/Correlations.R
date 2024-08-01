@@ -30,6 +30,9 @@ cor.test(fsg$AFSS, fsg$FSG) #-.08
 cor.test(cos$AFS, cos$COS) #.11
 cor.test(cos$AFSS, cos$COS) #-.07
 
+cor.test(cos$AFS, cos$AFP)
+cor.test(fsg$AFS, fsg$AFP) 
+
 ####Set up for Single Word Norms and strongest AFS Pairs####
 ##get the strongest affordance pairing
 temp = data.frame()
@@ -60,15 +63,6 @@ cos2 = subset(aff2,
               is.na(aff2$COS) == F)
 
 ##merge w/ lexical variables
-
-###Semantic Correlations
-##FSG
-cor.test(fsg2$AFS, fsg2$FSG) #.19
-cor.test(fsg2$AFSS, fsg2$FSG) #-.04
-
-##COS
-cor.test(cos2$AFS, cos2$COS) #-.10
-cor.test(cos2$AFSS, cos2$COS) #-.08
 
 ###Lexical Correlations
 ##strongest affordance
