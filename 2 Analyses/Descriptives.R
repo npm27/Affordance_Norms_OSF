@@ -17,17 +17,17 @@ hist(string)
 max(string)
 
 temp = subset(dat,
-             dat$cue == "bird")
+             dat$cue == "acorn")
 max(temp$AFP)
 
-bird = temp$AFS
-hist(bird)
-max(bird)
+acorn = temp$AFS
+hist(acorn)
+max(acorn)
 
 temp = subset(dat,
-              dat$cue == "dog")
+              dat$cue == "fabric")
 max(temp$AFP)
 
-dog = temp$AFS
-hist(dog)
-max(dog)
+fabric = temp$AFS
+hist(fabric)
+max(fabric)
