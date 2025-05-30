@@ -2,17 +2,27 @@
 #https://link.springer.com/article/10.1007/s10339-019-00939-6
 
 ####Set up####
-##libraries
-source("Libraries.R")
+##load packages #get these from packages script
+pckgs = c('dplyr', 'here', 'hunspell', 'tidytext', 'stringi', 'stringr',
+          'koRpus', 'koRpus.lang.en', 'tokenizers', 'textstem', 'udpipe', 'stopwords', 'ez')
+
+#check if package is installed. If yes, load. If not, install then load.
+for (i in 1:length(pckgs)) {
+  if (!(pckgs[[i]] %in% installed.packages())) {
+    install.packages(pckgs[[i]])
+  }
+  lapply(pckgs[[i]], library, character.only = T)
+}
 
 ##read in data
-master = read.csv("Data/Sample.csv", stringsAsFactors = F)
+master = read.csv("Data/Sample.csv", stringsAsFactors = F) #path currently loads from the 'Data' folder. Rename as needed.
 
 ##only keep the columns we need
-dat = master[ , c(1, 5, 11, 13, 19, 33)]
+dat = master[ , c(1, 5, 11, 13, 19, 33)] #Drop all columns except username, Trial number, Condition number, Cue, trial type, and response
 
-#useful column names
-colnames(dat)[6] = "affordance_response"
+#note that response may is listed as response.JOL. This is because I repurposed the JOL trial type to make the affordance norm trail type.
+#let's rename that column!
+colnames(dat)[6] = "affordance_response" 
 
 #make blank cells NA
 dat$affordance_response[dat$affordance_response == ""] = NA
@@ -21,7 +31,7 @@ dat$affordance_response[dat$affordance_response == "n/a"] = NA
 ##normalize all responses to lowercase
 dat$affordance_response = tolower(dat$affordance_response)
 
-source("Remove idk.R")
+source("Remove idk.R") #this reads in a script which removes "I don't know" or "not sure" or "unfamilir with word" type respones
 
 #Check for NAs
 table(is.na(dat$affordance_response))
@@ -29,7 +39,7 @@ table(is.na(dat$affordance_response))
 #remove nas
 dat = na.omit(dat)
 
-####Fix Spelling and Remove White Space####
+####Spell check and Remove White Space####
 ##Spelling
 #Extract a list of words
 #tokens = unnest_tokens(tbl = dat, output = token, input = affordance_response)
@@ -39,9 +49,9 @@ parsed_afforances = unnest_tokens(tbl = dat, output = parsed,
 
 parsed_afforances = unnest_tokens(tbl = parsed_afforances, output = parsed,
                                   input = parsed, token = "regex",
-                                  pattern = ",")
+                                  pattern = ",") #doing this twice. Once for double space after comma, and once for single space after comma
 
-
+#extract unique responses for spell checking
 wordlist = unique(parsed_afforances$parsed)
 
 #Run the spell check
@@ -56,7 +66,7 @@ spelling.sugg = unlist(lapply(spelling.sugg, function(x) x[1]))
 spell_check = cbind(spelling.sugg, spelling.errors)
 
 #Write to file and manually confirm
-write.csv(spell_check, file = "spell_check_raw.csv", row.names = F) ##open excel and manually check. Be sure to save changes!
+write.csv(spell_check, file = "spell_check_raw.csv", row.names = F) ##open excel and manually check that spelling suggestions are correct. Be sure to save changes!
 
 #read back in the checked output
 spell_check = read.csv("spell_check_raw.csv", stringsAsFactors = F)
@@ -129,7 +139,7 @@ combined = combined[ , -c(2, 10)]
 combined$lemma[combined$lemma == "spin-dry"] = "dry"
 combined$lemma[combined$lemma == "smoothy"] = "smoothie"
 
-#might be a good idea to open this up in excel and spot check
+#might be a good idea to open this up in excel and spot check. Some of the lemmas are weird. Control r in excel will be your friend (find and replace)
 
-##Write to .csv for POS checking
-#write.csv(combined, file = "Sample Cleaned", row.names = F)
+##Write to .csv for POS checking. You will need to manually confirm that udpipe tagged each word correctly (its a bit wonky sometimes)
+#write.csv(combined, file = "Sample Cleaned.csv", row.names = F) #Uncomment at start of line to write to file!
